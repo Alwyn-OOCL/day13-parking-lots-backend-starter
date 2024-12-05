@@ -1,6 +1,8 @@
 package org.afs.pakinglot.domain;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.afs.pakinglot.domain.exception.UnrecognizedTicketException;
 import org.afs.pakinglot.domain.strategies.AvailableRateStrategy;
 import org.afs.pakinglot.domain.strategies.MaxAvailableStrategy;
@@ -46,5 +48,31 @@ public class ParkingManager {
             }
         }
         throw new UnrecognizedTicketException();
+    }
+
+    //find ticket by plate number use stream
+    public Ticket findTicketByPlateNumber(String plateNumber) {
+        return Stream.of(standardParkingBoy, smartParkingBoy, superParkingBoy)
+                .map(parkingBoy -> parkingBoy.getParkingLots().stream()
+                        .map(parkingLot -> parkingLot.findTicketByPlateNumber(plateNumber))
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElseThrow(UnrecognizedTicketException::new);
+    }
+
+
+    public ParkingBoy getStandardParkingBoy() {
+        return standardParkingBoy;
+    }
+
+    public ParkingBoy getSmartParkingBoy() {
+        return smartParkingBoy;
+    }
+
+    public ParkingBoy getSuperParkingBoy() {
+        return superParkingBoy;
     }
 }

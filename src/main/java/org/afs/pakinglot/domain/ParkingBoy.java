@@ -35,4 +35,8 @@ public class ParkingBoy {
             .orElseThrow(UnrecognizedTicketException::new);
         return parkingLotOfTheTicket.fetch(ticket);
     }
+
+    public List<ParkingLot> getParkingLots() {
+        return parkingLots;
+    }
 }
