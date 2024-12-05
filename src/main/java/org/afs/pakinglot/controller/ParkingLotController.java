@@ -43,8 +43,8 @@ public class ParkingLotController {
     }
 
     @PostMapping("/fetch")
-    public ResponseEntity<Car> fetch(@RequestBody String plateNumber) {
-        Ticket ticket = parkingManager.findTicketByPlateNumber(plateNumber);
+    public ResponseEntity<Car> fetch(@RequestBody ParkingLotDto parkingLotDto) {
+        Ticket ticket = parkingManager.findTicketByPlateNumber(parkingLotDto.getPlateNumber());
         Car car = parkingManager.fetch(ticket);
         return ResponseEntity.ok(car);
     }

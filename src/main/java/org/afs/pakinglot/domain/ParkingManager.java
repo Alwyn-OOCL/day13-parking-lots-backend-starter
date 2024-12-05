@@ -52,12 +52,8 @@ public class ParkingManager {
 
     //find ticket by plate number use stream
     public Ticket findTicketByPlateNumber(String plateNumber) {
-        return Stream.of(standardParkingBoy, smartParkingBoy, superParkingBoy)
-                .map(parkingBoy -> parkingBoy.getParkingLots().stream()
-                        .map(parkingLot -> parkingLot.findTicketByPlateNumber(plateNumber))
-                        .filter(Objects::nonNull)
-                        .findFirst()
-                        .orElse(null))
+        return standardParkingBoy.getParkingLots().stream()
+                .map(parkingLot -> parkingLot.findTicketByPlateNumber(plateNumber))
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElseThrow(UnrecognizedTicketException::new);
