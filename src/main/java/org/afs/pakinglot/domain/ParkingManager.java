@@ -2,7 +2,7 @@ package org.afs.pakinglot.domain;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
+import org.afs.pakinglot.domain.enums.StrategyType;
 import org.afs.pakinglot.domain.exception.UnrecognizedTicketException;
 import org.afs.pakinglot.domain.strategies.AvailableRateStrategy;
 import org.afs.pakinglot.domain.strategies.MaxAvailableStrategy;
@@ -26,15 +26,15 @@ public class ParkingManager {
         this.superParkingBoy = new ParkingBoy(parkingLots, new AvailableRateStrategy());
     }
 
-    public Ticket park(String strategyType, String plateNumber) {
+    public Ticket park(StrategyType strategyType, String plateNumber) {
         Car car = new Car(plateNumber);
         if (strategyType == null) {
             throw new IllegalArgumentException("Invalid parking strategy type: null");
         }
-        return switch (strategyType.toUpperCase()) {
-            case "STANDARD" -> standardParkingBoy.park(car);
-            case "SMART" -> smartParkingBoy.park(car);
-            case "SUPER" -> superParkingBoy.park(car);
+        return switch (strategyType) {
+            case STANDARD -> standardParkingBoy.park(car);
+            case SMART -> smartParkingBoy.park(car);
+            case SUPER_SMART -> superParkingBoy.park(car);
             default -> throw new IllegalArgumentException("Invalid parking strategy type: " + strategyType);
         };
     }

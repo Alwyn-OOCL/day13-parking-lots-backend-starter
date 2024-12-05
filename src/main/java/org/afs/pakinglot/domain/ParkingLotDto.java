@@ -1,18 +1,18 @@
 package org.afs.pakinglot.domain;
 
-import org.springframework.web.bind.annotation.RequestBody;
+import org.afs.pakinglot.domain.enums.StrategyType;
 
 public class ParkingLotDto {
 
     String plateNumber;
 
-    String strategyType;
+    StrategyType strategyType;
 
     public String getPlateNumber() {
         return plateNumber;
     }
 
-    public String getStrategyType() {
+    public StrategyType getStrategyType() {
         return strategyType;
     }
 }
