@@ -25,6 +25,9 @@ public class ParkingManager {
 
     public Ticket park(String strategyType, String plateNumber) {
         Car car = new Car(plateNumber);
+        if (strategyType == null) {
+            throw new IllegalArgumentException("Invalid parking strategy type: null");
+        }
         return switch (strategyType.toUpperCase()) {
             case "STANDARD" -> standardParkingBoy.park(car);
             case "SMART" -> smartParkingBoy.park(car);
