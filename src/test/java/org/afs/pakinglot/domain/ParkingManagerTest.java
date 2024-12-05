@@ -1,5 +1,6 @@
 package org.afs.pakinglot.domain;
 
+import org.afs.pakinglot.domain.exception.UnrecognizedTicketException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -61,4 +62,46 @@ class ParkingManagerTest {
         });
         assertEquals("Invalid parking strategy type: ", exception.getMessage());
     }
+
+    @Test
+    void should_return_car_given_valid_ticket_when_fetch_then_success() {
+        // Given
+        String plateNumber = "ABC123";
+        Ticket ticket = parkingManager.park("STANDARD", plateNumber);
+        // When
+        Car car = parkingManager.fetch(ticket);
+        // Then
+        assertNotNull(car);
+        assertEquals(plateNumber, car.plateNumber());
+    }
+
+    @Test
+    void should_throw_exception_given_invalid_ticket_when_fetch_then_fail() {
+        // Given
+        Ticket invalidTicket = new Ticket("INVALID", 1, 1);
+        // When
+        // Then
+        assertThrows(UnrecognizedTicketException.class, () -> parkingManager.fetch(invalidTicket));
+    }
+
+    @Test
+    void should_throw_exception_given_null_ticket_when_fetch_then_fail() {
+        // Given
+        Ticket nullTicket = null;
+        // When
+        // Then
+        assertThrows(UnrecognizedTicketException.class, () -> parkingManager.fetch(nullTicket));
+    }
+
+    @Test
+    void should_throw_exception_given_used_ticket_when_fetch_then_fail() {
+        // Given
+        String plateNumber = "DEF456";
+        Ticket ticket = parkingManager.park("SMART", plateNumber);
+        parkingManager.fetch(ticket); // Use the ticket once
+        // When
+        // Then
+        assertThrows(UnrecognizedTicketException.class, () -> parkingManager.fetch(ticket));
+    }
+
 }

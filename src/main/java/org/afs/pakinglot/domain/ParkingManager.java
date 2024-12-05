@@ -1,6 +1,7 @@
 package org.afs.pakinglot.domain;
 
 import java.util.List;
+import org.afs.pakinglot.domain.exception.UnrecognizedTicketException;
 import org.afs.pakinglot.domain.strategies.AvailableRateStrategy;
 import org.afs.pakinglot.domain.strategies.MaxAvailableStrategy;
 import org.afs.pakinglot.domain.strategies.SequentiallyStrategy;
@@ -34,5 +35,16 @@ public class ParkingManager {
             case "SUPER" -> superParkingBoy.park(car);
             default -> throw new IllegalArgumentException("Invalid parking strategy type: " + strategyType);
         };
+    }
+
+    public Car fetch(Ticket ticket) {
+        for (ParkingBoy parkingBoy : List.of(standardParkingBoy, smartParkingBoy, superParkingBoy)) {
+            try {
+                return parkingBoy.fetch(ticket);
+            } catch (UnrecognizedTicketException ignored) {
+                // Continue to the next parking boy
+            }
+        }
+        throw new UnrecognizedTicketException();
     }
 }
