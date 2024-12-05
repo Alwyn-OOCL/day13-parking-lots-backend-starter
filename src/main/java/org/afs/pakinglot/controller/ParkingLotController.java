@@ -43,10 +43,15 @@ public class ParkingLotController {
     }
 
     @PostMapping("/fetch")
+//    public ResponseEntity<FetchingInfo> fetch(@RequestBody ParkingLotDto parkingLotDto) {
     public ResponseEntity<Car> fetch(@RequestBody ParkingLotDto parkingLotDto) {
         Ticket ticket = parkingManager.findTicketByPlateNumber(parkingLotDto.getPlateNumber());
         Car car = parkingManager.fetch(ticket);
         return ResponseEntity.ok(car);
+//        FetchingInfo fetchingInfo = new FetchingInfo(car, parkingManager.calculatePrice(parkingLotDto.getParkTime()));
+//        long timeDiff = new Date().getTime() - parkingLotDto.getParkTime().getTime();
+//        fetchingInfo.setParkTime(new Date(timeDiff));
+//        return ResponseEntity.ok(fetchingInfo);
     }
 
 }

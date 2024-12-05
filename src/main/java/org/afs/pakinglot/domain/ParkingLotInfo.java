@@ -1,13 +1,12 @@
 package org.afs.pakinglot.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLotInfo {
 
     private int id;
     private String name;
-    private List<Ticket> tickets = new ArrayList<>();
+    private List<Ticket> tickets;
 
     public ParkingLotInfo(int id, String name, List<Ticket> tickets) {
         this.id = id;

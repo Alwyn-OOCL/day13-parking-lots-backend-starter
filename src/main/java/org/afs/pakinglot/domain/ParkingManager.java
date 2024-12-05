@@ -1,8 +1,10 @@
 package org.afs.pakinglot.domain;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import org.afs.pakinglot.domain.enums.StrategyType;
+import org.afs.pakinglot.domain.enums.ParkingStrategyType;
 import org.afs.pakinglot.domain.exception.UnrecognizedTicketException;
 import org.afs.pakinglot.domain.strategies.AvailableRateStrategy;
 import org.afs.pakinglot.domain.strategies.MaxAvailableStrategy;
@@ -26,16 +28,16 @@ public class ParkingManager {
         this.superParkingBoy = new ParkingBoy(parkingLots, new AvailableRateStrategy());
     }
 
-    public Ticket park(StrategyType strategyType, String plateNumber) {
+    public Ticket park(ParkingStrategyType parkingStrategyType, String plateNumber) {
         Car car = new Car(plateNumber);
-        if (strategyType == null) {
+        if (parkingStrategyType == null) {
             throw new IllegalArgumentException("Invalid parking strategy type: null");
         }
-        return switch (strategyType) {
+        return switch (parkingStrategyType) {
             case STANDARD -> standardParkingBoy.park(car);
             case SMART -> smartParkingBoy.park(car);
             case SUPER_SMART -> superParkingBoy.park(car);
-            default -> throw new IllegalArgumentException("Invalid parking strategy type: " + strategyType);
+            default -> throw new IllegalArgumentException("Invalid parking strategy type: " + parkingStrategyType);
         };
     }
 
@@ -57,6 +59,14 @@ public class ParkingManager {
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElseThrow(UnrecognizedTicketException::new);
+    }
+
+    public BigDecimal calculatePrice(Date parkTime) {
+        // 3 dollar per hour
+        Date now = new Date();
+        long diff = now.getTime() - parkTime.getTime();
+        long diffHours = diff / (60 * 60 * 1000);
+        return BigDecimal.valueOf(diffHours * 3);
     }
 
 

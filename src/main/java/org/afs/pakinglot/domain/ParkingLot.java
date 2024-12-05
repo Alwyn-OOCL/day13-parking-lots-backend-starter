@@ -1,6 +1,7 @@
 package org.afs.pakinglot.domain;
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class ParkingLot {
             throw new NoAvailablePositionException();
         }
 
-        Ticket ticket = new Ticket(car.plateNumber(), tickets.size() + 1, this.id);
+        Ticket ticket = new Ticket(car.plateNumber(), tickets.size() + 1, this.id, new Date());
         tickets.put(ticket, car);
         return ticket;
     }
